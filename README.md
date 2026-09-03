@@ -1,2 +1,2 @@
 # SQL_APP
-Web-based application allowing for SQL query tests with an example table and visual presentation of query results. Built for learning purpose.
+This application's purpose is to built a (home network) web-based setting for SQL testing and learning. Random test data is used in table format and query results are displayed visually in table format. In a second step exemplary exercises and their solutions are available in a different directory of the application. 
