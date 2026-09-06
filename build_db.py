@@ -42,5 +42,6 @@ def build_database() -> None:
         conn.close()
 
 
+# Only run build_database() if this file is executed directly, not if it is imported by another file
 if __name__ == "__main__":
     build_database()
