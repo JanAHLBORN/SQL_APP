@@ -10,8 +10,8 @@ import pandas as pd
 
 # Declare relative paths and table name
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-CSV_PATH = PROJECT_ROOT / "Database" / "customer_data.csv"
-DB_PATH = PROJECT_ROOT / "Database" / "sql_playground.db"
+CSV_PATH = PROJECT_ROOT / "SQL_APP" / "Database" / "customer_data.csv"
+DB_PATH = PROJECT_ROOT / "SQL_APP" / "Database" / "sql_playground.db"
 TABLE_NAME = "customer_data"
 
 # Build the database from csv file
