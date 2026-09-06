@@ -15,7 +15,8 @@ from build_db import build_database, CSV_PATH, DB_PATH, TABLE_NAME
 # Configure the Streamlit page
 st.set_page_config(
     page_title="SQL Playground",
-    layout="wide"
+    layout="wide",
+    page_icon=":dragon:",
 )
 
 # ============================================================================
