@@ -125,57 +125,44 @@ with st.sidebar:
     )
 
 
-
-
-
-
 # ============================================================================
 # Ensure that the database exists
 # ============================================================================
-# Create the database automatically if it does not exist yet.
+# Create the database if it does not exist
 if not DB_PATH.exists():
-
-    # A new database can only be created if the CSV file exists.
+    # A new database is created (if the CSV file exists)
     if CSV_PATH.exists():
         build_database()
-
     else:
-        # Display an error message inside the Streamlit app.
+        # Display an error message inside the Streamlit app
         st.error(
             f"Neither the database nor the CSV file was found.\n\n"
             f"Place the CSV file at `{CSV_PATH}` and reload the page."
         )
-
-        # Stop execution so no further code is run.
+        # Stop execution
         st.stop()
 
 
 # ============================================================================
 # Display the complete database table
 # ============================================================================
-
-# Main page title.
+# Main page title
 st.title("SQL Playground")
-
-# Display the name of the current database table.
+# Display the name of the current database table
 st.subheader(f"Sample table: {TABLE_NAME}")
-
-# Load the entire table from the database.
+# Load the entire table from the database
 full_df = load_full_table()
-
-# Display the DataFrame as an interactive table.
+# Display the DataFrame as an interactive table
 st.dataframe(
     full_df,
     use_container_width=True,
     height=350
 )
-
-# Display the table dimensions.
+# Display the table dimensions
 st.caption(
     f"{len(full_df)} rows, {len(full_df.columns)} columns"
 )
-
-# Horizontal separator.
+# Horizontal separator
 st.markdown("---")
 
 
@@ -184,64 +171,49 @@ st.markdown("---")
 # Left side = SQL editor
 # Right side = query result
 # ============================================================================
-
-# Create two equally sized columns.
+# Create two equally sized columns
 left_col, right_col = st.columns(2)
-
-
 # -----------------------------
 # Left column: SQL editor
 # -----------------------------
 with left_col:
-
     st.subheader("SQL Query")
-
-    # Default SQL statement shown when the page is first opened.
+    # Default SQL statement shown when the page is first opened
     default_query = f"SELECT * FROM {TABLE_NAME} LIMIT 10;"
-
-    # Multi-line text input for entering SQL commands.
+    # Multi-line text input for entering SQL commands
     query = st.text_area(
         "Enter an SQL query:",
         value=default_query,
         height=250,
         label_visibility="collapsed",
     )
-
-    # Execute button.
+    # Execute button
     run_clicked = st.button(
         "▶ Run",
         type="primary"
     )
 
-
 # -----------------------------
 # Right column: Query results
 # -----------------------------
 with right_col:
-
     st.subheader("Result")
-
-    # Only execute the SQL statement after the button has been clicked.
+    # Only execute the SQL statement after the button has been clicked
     if run_clicked:
-
         result_df, message, is_error = run_query(query)
-
-        # Display an error message.
+        # Display an error message
         if is_error:
             st.error(f"Error:\n\n{message}")
-
-        # Display query results if a DataFrame was returned.
+        # Display query results if a DataFrame was returned
         elif result_df is not None:
             st.dataframe(
                 result_df,
                 use_container_width=True,
                 height=350
             )
-
             st.caption(
                 f"{len(result_df)} row(s) returned"
             )
-
         # Display the success message for INSERT, UPDATE, DELETE, etc.
         else:
             st.success(message)
