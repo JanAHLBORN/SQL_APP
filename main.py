@@ -5,7 +5,7 @@ import sqlite3            # Built-in Python module for SQLite databases (stores 
 from pathlib import Path
 import pandas as pd
 import streamlit as st    # Streamlit is used to build interactive web applications with Python
-from scripts.build_db import build_database, CSV_PATH, DB_PATH, TABLE_NAME
+from build_db import build_database, CSV_PATH, DB_PATH, TABLE_NAME
 # Imports project-specific variables and functions:
 # - build_database(): Creates a new SQLite database from the CSV file
 # - CSV_PATH: Location of the original CSV file
