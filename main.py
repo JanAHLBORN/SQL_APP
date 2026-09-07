@@ -98,43 +98,35 @@ def run_query(query: str):
 # ============================================================================
 # A list of dictionaries, each representing one practice question.
 # "question"    -> the task description shown to the user
-# "explanation" -> which SQL concept this question tests (useful for interview prep)
 # "answer"      -> the SQL statement that solves the task, revealed inside a
 #                  collapsible dropdown (st.expander) so it is hidden by default
 EXEMPLARY_TASKS = [
     {
         "question": "Show only the first name, surname, and country of every customer.",
-        "explanation": "Tests basic SELECT with column filtering, and quoting a column name that contains a space.",
         "answer": 'SELECT "First name", Surname, Country FROM customer_data;',
     },
     {
         "question": 'Find all purchases made by customers from "Germany".',
-        "explanation": "Tests filtering rows with WHERE and string comparison.",
         "answer": "SELECT * FROM customer_data WHERE Country = 'Germany';",
     },
     {
         "question": "List all purchases ordered by Amount, highest first.",
-        "explanation": "Tests sorting results with ORDER BY ... DESC.",
         "answer": "SELECT * FROM customer_data ORDER BY Amount DESC;",
     },
     {
         "question": "Find the 5 highest-value purchases.",
-        "explanation": "Tests combining ORDER BY with LIMIT, a very common interview combination.",
         "answer": "SELECT * FROM customer_data ORDER BY Amount DESC LIMIT 5;",
     },
     {
         "question": "List all unique countries that appear in the table.",
-        "explanation": "Tests DISTINCT, important since the data contains duplicate people/countries.",
         "answer": "SELECT DISTINCT Country FROM customer_data;",
     },
     {
         "question": "What is the total (sum) of all purchase amounts?",
-        "explanation": "Tests an aggregate function (SUM). Also know COUNT, AVG, MIN, MAX.",
         "answer": "SELECT SUM(Amount) AS total_revenue FROM customer_data;",
     },
     {
         "question": "Show the total amount spent per country.",
-        "explanation": "Tests GROUP BY, one of the most-tested beginner concepts, combining aggregation with grouping logic.",
         "answer": (
             "SELECT Country, SUM(Amount) AS total_spent\n"
             "FROM customer_data\n"
@@ -143,7 +135,6 @@ EXEMPLARY_TASKS = [
     },
     {
         "question": "Show only countries where total spending exceeds 1000.",
-        "explanation": "Tests HAVING vs WHERE: WHERE filters rows before grouping, HAVING filters after aggregation.",
         "answer": (
             "SELECT Country, SUM(Amount) AS total_spent\n"
             "FROM customer_data\n"
@@ -156,7 +147,6 @@ EXEMPLARY_TASKS = [
             "Find all names (first name + surname combination) that appear more than "
             "once in the table, e.g. because they bought multiple products."
         ),
-        "explanation": "Tests GROUP BY on multiple columns combined with HAVING COUNT(*) > 1, a very common real interview question about finding duplicates.",
         "answer": (
             'SELECT "First name", Surname, COUNT(*) AS num_purchases\n'
             "FROM customer_data\n"
@@ -166,12 +156,10 @@ EXEMPLARY_TASKS = [
     },
     {
         "question": 'Find all customers whose product name contains the word "Pro" (e.g. "Laptop Pro").',
-        "explanation": "Tests LIKE with wildcards (%), commonly used for search-style filtering.",
         "answer": "SELECT * FROM customer_data WHERE Product LIKE '%Pro%';",
     },
     {
-        "question": "Bonus: Find all rows where Amount was not recorded (missing value).",
-        "explanation": "Tests handling of NULL values. A classic beginner mistake is using '= NULL' instead of 'IS NULL'.",
+        "question": "Find all rows where Amount was not recorded (missing value).",
         "answer": "SELECT * FROM customer_data WHERE Amount IS NULL;",
     },
 ]
@@ -193,17 +181,17 @@ if "page" not in st.session_state:
 # The columns list [6, 1, 1] creates one wide empty spacer column on the
 # left and two narrow columns on the right, which visually pushes the
 # two navigation buttons towards the top-right corner of the page.
-spacer_col, playground_btn_col, tasks_btn_col = st.columns([6, 1, 1])
+spacer_col, playground_btn_col, tasks_btn_col = st.columns([6, 1.5, 1.5])
 
 with playground_btn_col:
     # Clicking this button switches the active page to "Playground"
-    if st.button("Playground", use_container_width=True):
+    if st.button("Playground", width="content"):
         st.session_state.page = "Playground"
         st.rerun()
 
 with tasks_btn_col:
     # Clicking this button switches the active page to "Exemplary Tasks"
-    if st.button("Exemplary Tasks", use_container_width=True):
+    if st.button("Exemplary Tasks", width="content"):
         st.session_state.page = "Exemplary Tasks"
         st.rerun()
 
@@ -213,7 +201,7 @@ st.markdown("---")
 # ============================================================================
 # PAGE 1: Playground
 # ============================================================================
-# All the original SQL Playground functionality lives inside this block and
+# All SQL Playground functionality lives inside this block and
 # only runs while the "Playground" page is selected.
 if st.session_state.page == "Playground":
 
@@ -354,12 +342,11 @@ if st.session_state.page == "Playground":
 # PAGE 2: Exemplary Tasks
 # ============================================================================
 # This block only runs while the "Exemplary Tasks" page is selected.
-# It displays a list of beginner-friendly SQL practice questions, each with
+# It displays a list of SQL practice questions, each with
 # a hidden dropdown (st.expander) revealing the solution query.
 elif st.session_state.page == "Exemplary Tasks":
-
     st.title("Exemplary Tasks")
-    st.subheader("Practice questions for SQL interviews")
+    st.subheader("Practice questions for SQL")
     st.caption(
         "Try writing the query yourself on the Playground page first, then "
         "open the dropdown below each question to check the solution."
@@ -371,8 +358,6 @@ elif st.session_state.page == "Exemplary Tasks":
     # used to label each question (Question 1, Question 2, ...).
     for i, task in enumerate(EXEMPLARY_TASKS, start=1):
         st.markdown(f"**Question {i}:** {task['question']}")
-        st.caption(task["explanation"])
-
         # st.expander creates a collapsible section that is closed by
         # default, so the answer is hidden until the user clicks on it.
         with st.expander("Show answer"):
