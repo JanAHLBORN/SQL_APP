@@ -1,4 +1,4 @@
 # SQL_APP
 This application's purpose is to built a (home network) web-based setting for SQL testing and learning. Random test data is used in table format and query results are displayed visually in table format. In a second step exemplary exercises and their solutions are available in a different directory of the application. 
 
-<img width="2416" height="1038" alt="grafik" src="https://github.com/user-attachments/assets/a90caf5a-9916-4e9b-8c44-ef33686d2564" />
+<img width="2510" height="1052" alt="grafik" src="https://github.com/user-attachments/assets/d6ab9eb3-e4f4-4610-bbb6-1c2776bd558b" />
