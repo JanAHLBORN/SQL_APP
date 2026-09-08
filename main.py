@@ -238,12 +238,12 @@ EXEMPLARY_TASKS = [
     {
         "question": "Find customers who have bought more than one distinct product (using a subquery instead of GROUP BY/HAVING).",
         "answer": (
-            "SELECT DISTINCT "First name", Surname\n"
+            "SELECT DISTINCT 'First name', Surname\n"
             "FROM customer_data c1\n"
             "WHERE (\n"
             "  SELECT COUNT(DISTINCT Product)\n"
             "  FROM customer_data c2\n"
-            "  WHERE c2."First name" = c1."First name"\n"
+            "  WHERE c2.'First name' = c1.'First name'\n"
             "    AND c2.Surname = c1.Surname\n"
             ") > 1;"
         ),
@@ -283,11 +283,11 @@ EXEMPLARY_TASKS = [
             "and separately customers whose Amount is over 100 (no duplicates)."
         ),
         "answer": (
-            "SELECT "First name", Surname, Country, Amount\n"
+            "SELECT 'First name', Surname, Country, Amount\n"
             "FROM customer_data\n"
             "WHERE Country = 'Germany'\n"
             "UNION\n"
-            "SELECT "First name", Surname, Country, Amount\n"
+            "SELECT 'First name', Surname, Country, Amount\n"
             "FROM customer_data\n"
             "WHERE Amount > 100;"
         ),
