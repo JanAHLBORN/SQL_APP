@@ -105,27 +105,48 @@ def run_query(query: str):
 EXEMPLARY_TASKS = [
     {
         "question": "Show only the first name, surname, and country of every customer.",
-        "answer": 'SELECT "First name", Surname, Country FROM customer_data;',
+        "answer": (
+            'SELECT "First name", Surname, Country\n'
+            'FROM customer_data;'
+        ),
     },
     {
         "question": 'Find all purchases made by customers from "Germany".',
-        "answer": "SELECT * FROM customer_data WHERE Country = 'Germany';",
+        "answer": (
+            "SELECT *\n"
+            "FROM customer_data\n"
+            "WHERE Country = 'Germany';"
+        ),
     },
     {
         "question": "List all purchases ordered by Amount, highest first.",
-        "answer": "SELECT * FROM customer_data ORDER BY Amount DESC;",
+        "answer": (
+            "SELECT *\n"
+            "FROM customer_data\n"
+            "ORDER BY Amount DESC;"
+        ),
     },
     {
         "question": "Find the 5 highest-value purchases.",
-        "answer": "SELECT * FROM customer_data ORDER BY Amount DESC LIMIT 5;",
+        "answer": (
+            "SELECT *\n"
+            "FROM customer_data\n"
+            "ORDER BY Amount DESC LIMIT 5;"
+        ),
     },
     {
         "question": "List all unique countries that appear in the table.",
-        "answer": "SELECT DISTINCT Country FROM customer_data;",
+        "answer": (
+            "SELECT DISTINCT Country\n"
+            "FROM customer_data;"
+        ),
     },
     {
         "question": "What is the total (sum) of all purchase amounts?",
-        "answer": "SELECT SUM(Amount) AS total_revenue FROM customer_data;",
+        "answer": (
+            "SELECT SUM(Amount) AS total_revenue\n"
+            "FROM customer_data;"
+        ),
     },
     {
         "question": "Show the total amount spent per country.",
@@ -136,12 +157,12 @@ EXEMPLARY_TASKS = [
         ),
     },
     {
-        "question": "Show only countries where total spending exceeds 1000.",
+        "question": "Show only countries where total spending exceeds 50.",
         "answer": (
             "SELECT Country, SUM(Amount) AS total_spent\n"
             "FROM customer_data\n"
             "GROUP BY Country\n"
-            "HAVING SUM(Amount) > 1000;"
+            "HAVING SUM(Amount) > 50;"
         ),
     },
     {
@@ -158,11 +179,157 @@ EXEMPLARY_TASKS = [
     },
     {
         "question": 'Find all customers whose product name contains the word "Pro" (e.g. "Laptop Pro").',
-        "answer": "SELECT * FROM customer_data WHERE Product LIKE '%Pro%';",
+        "answer": (
+            "SELECT *\n"
+            "FROM customer_data\n"
+            "WHERE Product LIKE '%Pro%';"
+        ),
     },
     {
         "question": "Find all rows where Amount was not recorded (missing value).",
-        "answer": "SELECT * FROM customer_data WHERE Amount IS NULL;",
+        "answer": (
+            "SELECT *\n"
+            "FROM customer_data\n"
+            "WHERE Amount IS NULL;"
+        ),
+    },
+        {
+        "question": "Label each purchase as 'High' if Amount is greater than 100, otherwise 'Low'.",
+        "answer": (
+            "SELECT *,\n"
+            "  CASE\n"
+            "    WHEN Amount > 100 THEN 'High'\n"
+            "    ELSE 'Low'\n"
+            "  END AS amount_category\n"
+            "FROM customer_data;"
+        ),
+    },
+    {
+        "question": 'Find all purchases from customers in "Germany", "France", or "Italy".',
+        "answer": (
+            "SELECT *\n"
+            "FROM customer_data\n"
+            "WHERE Country IN ('Germany', 'France', 'Italy');"
+        ),
+    },
+    {
+        "question": "Find all purchases with an Amount between 50 and 100 (inclusive).",
+        "answer": (
+            "SELECT *\n"
+            "FROM customer_data\n"
+            "WHERE Amount BETWEEN 50 AND 100;"
+        ),
+    },
+    {
+        "question": "Replace missing (NULL) Amount values with 0 when displaying the results.",
+        "answer": (
+            "SELECT *, COALESCE(Amount, 0) AS amount_filled\n"
+            "FROM customer_data;"
+        ),
+    },
+    {
+        "question": "Find all purchases with an Amount higher than the average Amount across all purchases.",
+        "answer": (
+            "SELECT *\n"
+            "FROM customer_data\n"
+            "WHERE Amount > (SELECT AVG(Amount) FROM customer_data);"
+        ),
+    },
+    {
+        "question": "Find customers who have bought more than one distinct product (using a subquery instead of GROUP BY/HAVING).",
+        "answer": (
+            "SELECT DISTINCT "First name", Surname\n"
+            "FROM customer_data c1\n"
+            "WHERE (\n"
+            "  SELECT COUNT(DISTINCT Product)\n"
+            "  FROM customer_data c2\n"
+            "  WHERE c2."First name" = c1."First name"\n"
+            "    AND c2.Surname = c1.Surname\n"
+            ") > 1;"
+        ),
+    },
+    {
+        "question": "Rank all purchases by Amount within each country, highest first.",
+        "answer": (
+            "SELECT *,\n"
+            "  RANK() OVER (PARTITION BY Country ORDER BY Amount DESC) AS rank_in_country\n"
+            "FROM customer_data;"
+        ),
+    },
+    {
+        "question": "Show a running total of Amount, ordered by id.",
+        "answer": (
+            "SELECT id, Amount,\n"
+            "  SUM(Amount) OVER (ORDER BY id) AS running_total\n"
+            "FROM customer_data;"
+        ),
+    },
+    {
+        "question": "Using a CTE (WITH clause), find countries whose total spending is above 200.",
+        "answer": (
+            "WITH country_totals AS (\n"
+            "  SELECT Country, SUM(Amount) AS total_spent\n"
+            "  FROM customer_data\n"
+            "  GROUP BY Country\n"
+            ")\n"
+            "SELECT *\n"
+            "FROM country_totals\n"
+            "WHERE total_spent > 200;"
+        ),
+    },
+    {
+        "question": (
+            "Combine two lists into one result: customers from 'Germany', "
+            "and separately customers whose Amount is over 100 (no duplicates)."
+        ),
+        "answer": (
+            "SELECT "First name", Surname, Country, Amount\n"
+            "FROM customer_data\n"
+            "WHERE Country = 'Germany'\n"
+            "UNION\n"
+            "SELECT "First name", Surname, Country, Amount\n"
+            "FROM customer_data\n"
+            "WHERE Amount > 100;"
+        ),
+    },
+        {
+        "question": 'Insert a new customer purchase: First name "Max", Surname "Mustermann", Country "Germany", Amount 250, Product "Keyboard".',
+        "answer": (
+            'INSERT INTO customer_data ("First name", Surname, Country, Amount, Product)\n'
+            "VALUES ('Max', 'Mustermann', 'Germany', 250, 'Keyboard');"
+        ),
+    },
+    {
+        "question": "Increase the Amount by 10% for all purchases made in \"France\".",
+        "answer": (
+            "UPDATE customer_data\n"
+            "SET Amount = Amount * 1.1\n"
+            "WHERE Country = 'France';"
+        ),
+    },
+    {
+        "question": "Delete all purchases where Amount is missing (NULL).",
+        "answer": (
+            "DELETE FROM customer_data\n"
+            "WHERE Amount IS NULL;"
+        ),
+    },
+    {
+        "question": "Add a new column called Discount to the table, to later store a discount percentage per purchase.",
+        "answer": (
+            "ALTER TABLE customer_data\n"
+            "ADD COLUMN Discount REAL;"
+        ),
+    },
+    {
+        "question": "Set Discount to 15 for every purchase with an Amount greater than 200, and 0 for all others.",
+        "answer": (
+            "UPDATE customer_data\n"
+            "SET Discount = CASE\n"
+            "  WHEN Amount > 200 THEN 15\n"
+            "  ELSE 0\n"
+            "END;"
+        ),
     },
 ]
 
