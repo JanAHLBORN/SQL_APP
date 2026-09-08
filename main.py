@@ -194,11 +194,11 @@ EXEMPLARY_TASKS = [
         ),
     },
         {
-        "question": "Label each purchase as 'High' if Amount is greater than 100, otherwise 'Low'.",
+        "question": "Label each purchase as 'High' if Amount is greater than 10, otherwise 'Low'.",
         "answer": (
             "SELECT *,\n"
             "  CASE\n"
-            "    WHEN Amount > 100 THEN 'High'\n"
+            "    WHEN Amount > 10 THEN 'High'\n"
             "    ELSE 'Low'\n"
             "  END AS amount_category\n"
             "FROM customer_data;"
@@ -213,11 +213,11 @@ EXEMPLARY_TASKS = [
         ),
     },
     {
-        "question": "Find all purchases with an Amount between 50 and 100 (inclusive).",
+        "question": "Find all purchases with an Amount between 5 and 10 (inclusive).",
         "answer": (
             "SELECT *\n"
             "FROM customer_data\n"
-            "WHERE Amount BETWEEN 50 AND 100;"
+            "WHERE Amount BETWEEN 5 AND 10;"
         ),
     },
     {
