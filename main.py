@@ -2,10 +2,9 @@
 # Import required modules
 # ============================================================================
 import sqlite3            # Built-in Python module for SQLite databases (stores entire database inside a single file)
-from pathlib import Path
 import pandas as pd
 import streamlit as st    # Streamlit is used to build interactive web applications with Python
-from build_db import build_database, CSV_PATH, DB_PATH, TABLE_NAME
+from build_db import reset_database, CSV_PATH_ORDERS, TABLE_NAME_ORDERS, CSV_PATH_SECRETS, TABLE_NAME_SECRETS, DB_PATH
 # Imports project-specific variables and functions:
 # - build_database(): Creates a new SQLite database from the CSV file
 # - CSV_PATH: Location of the original CSV file
@@ -32,7 +31,7 @@ def get_connection() -> sqlite3.Connection:
     return sqlite3.connect(DB_PATH)
 
 
-def load_full_table() -> pd.DataFrame:
+def load_full_table(TABLE_NAME: str) -> pd.DataFrame:
     """
     Loads database table into a Pandas DataFrame.
     """
@@ -339,18 +338,20 @@ EXEMPLARY_TASKS = [
 # ============================================================================
 # Create the database if it does not exist
 if not DB_PATH.exists():
-    # A new database is created (if the CSV file exists)
-    if CSV_PATH.exists():
-        build_database()
+    # A new database is created if both CSV files exist
+    if CSV_PATH_ORDERS.exists() and CSV_PATH_SECRETS.exists():
+        reset_database()
     else:
         # Display an error message inside the Streamlit app
         st.error(
-            f"Neither the database nor the CSV file was found.\n\n"
-            f"Place the CSV file at `{CSV_PATH}` and reload the page."
+            f"Database does not exist and one or more CSV files are missing.\n\n"
+            f"Make sure both CSV files are placed at:\n"
+            f"- `{CSV_PATH_ORDERS}`\n"
+            f"- `{CSV_PATH_SECRETS}`\n\n"
+            f"Then reload the page."
         )
         # Stop execution
         st.stop()
-
 
 # ============================================================================
 # Sidebar
@@ -375,16 +376,16 @@ with st.sidebar:
     if sidebar_view == "Settings":
         st.header("Settings")
         # Display information about the currently used data source
-        st.write(f"CSV source: `{CSV_PATH.name}`")
-        st.write(f"Table: `{TABLE_NAME}`")
+        st.write(f"CSV sources: `{CSV_PATH_ORDERS.name}` and `{CSV_PATH_SECRETS.name}`")
+        st.write(f"Tables: `{TABLE_NAME_ORDERS}`, `{TABLE_NAME_ORDERS}`")
 
         # Create a button: queries inside the if-block only run when the button is clicked
         if st.button(
             "🔄 Reset database from CSV",
             use_container_width=True
         ):
-            # Rebuild the SQLite database using the original CSV file
-            build_database()
+            # Rebuild the SQLite database using the original CSV files
+            reset_database()
             # Display a success message
             st.success("Database recreated from the CSV file.")
             # Reload the page so the update becomes visible
@@ -423,14 +424,26 @@ with st.sidebar:
 
 
 # ============================================================================
-# Display the complete database table
+# Display the complete database table (selected)
 # ============================================================================
+TABLES = {
+    "Orders": TABLE_NAME_ORDERS,
+    "Secrets": TABLE_NAME_SECRETS,
+}
+
 # Main page title
 st.title("SQL Playground")
+# Create a radio button that allows to decide which table to display
+selected_label = st.radio(
+    "Choose a table:",
+    options=TABLES.keys(),
+    horizontal=True,
+)
+selected_table = TABLES[selected_label]
 # Display the name of the current database table
-st.subheader(f"Sample table: {TABLE_NAME}")
+st.subheader(f"Sample table: {selected_table}")
 # Load the entire table from the database
-full_df = load_full_table()
+full_df = load_full_table(TABLE_NAME=selected_table)
 # Display the DataFrame as an interactive table
 st.dataframe(
     full_df,
@@ -458,7 +471,7 @@ left_col, right_col = st.columns(2)
 with left_col:
     st.subheader("SQL Query")
     # Default SQL statement shown when the page is first opened
-    default_query = f"SELECT * FROM {TABLE_NAME} LIMIT 10;"
+    default_query = f"SELECT * FROM {TABLE_NAME_ORDERS} LIMIT 3;"
     # Multi-line text input for entering SQL commands
     query = st.text_area(
         "Enter an SQL query:",

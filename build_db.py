@@ -8,40 +8,71 @@ import sys
 from pathlib import Path
 import pandas as pd
 
-# Declare relative paths and table name
+
+# ============================================================================
+# Declare relative paths and table names
+# ============================================================================
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-CSV_PATH = PROJECT_ROOT / "SQL_APP" / "Database" / "customer_data.csv"
+# 1. table
+CSV_PATH_ORDERS = PROJECT_ROOT / "SQL_APP" / "Database" / "customer_data.csv"
+TABLE_NAME_ORDERS = "customer_data"
+# 2. table (relational)
+CSV_PATH_SECRETS = PROJECT_ROOT / "SQL_APP" / "Database" / "customer_secrets.csv"
+TABLE_NAME_SECRETS = "customer_secrets"
+# Database path
 DB_PATH = PROJECT_ROOT / "SQL_APP" / "Database" / "sql_playground.db"
-TABLE_NAME = "customer_data"
 
-# Build the database from csv file
-def build_database() -> None:
-    # Catch error if data is not there
-    if not CSV_PATH.exists():
-        print(f"Error: CSV-File not found under: {CSV_PATH}")
-        print("Please make sure that 'customer_data.csv' exists in the directory 'Database'.")
+
+# ============================================================================
+# Build one database table from one CSV file
+# ============================================================================
+def build_database(csv_path: Path, table_name: str, conn) -> None:
+    # Error log if csv file is missing
+    if not csv_path.exists():
+        print(f"Error: CSV file not found: {csv_path}")
         sys.exit(1)
-
-    # Read the file with pandas
-    print(f"Reading CSV-file: {CSV_PATH}")
-    df = pd.read_csv(CSV_PATH)
+    # Load dataframe and create more logs
+    print(f"Reading CSV file: {csv_path}")
+    df = pd.read_csv(csv_path)
     print(f"Found columns: {list(df.columns)}")
-    print(f"Number of lines: {len(df)}")
+    print(f"Number of rows: {len(df)}")
+    df.to_sql(
+        table_name,
+        conn,
+        index=False,
+        if_exists="replace"
+    )
+    print(f"Table '{table_name}' created successfully.")
 
-    # Override DB if already existing
+
+# ============================================================================
+# Rebuild the complete database
+# ============================================================================
+def reset_database() -> None:
     if DB_PATH.exists():
         DB_PATH.unlink()
-        print("Existing database has been replaced.")
 
     conn = sqlite3.connect(DB_PATH)
     try:
-        df.to_sql(TABLE_NAME, conn, index=False, if_exists="replace")
+        build_database(
+            CSV_PATH_ORDERS,
+            TABLE_NAME_ORDERS,
+            conn
+        )
+
+        build_database(
+            CSV_PATH_SECRETS,
+            TABLE_NAME_SECRETS,
+            conn
+        )
         conn.commit()
-        print(f"Tabelle '{TABLE_NAME}' erfolgreich in {DB_PATH} erstellt.")
+
     finally:
         conn.close()
 
 
-# Only run build_database() if this file is executed directly, not if it is imported by another file
+# ============================================================================
+# Run only when this file is executed directly
+# ============================================================================
 if __name__ == "__main__":
-    build_database()
+    reset_database()
