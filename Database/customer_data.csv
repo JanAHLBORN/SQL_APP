@@ -1,38 +1,38 @@
-id,First name,Surname,Country,Amount,Product
-1,Tim,Gross,Germany,9,Apple
-2,Henry,Klein,America,1,Bread
-3,Sara,Mittel,Italy,2,Orange
-4,Alina,Oben,Japan,19,TV
-5,Mike,Unten,Korea,34,Book
-6,Thomas,Rechts,Poland,7,Sandwich
-7,Vanessa,Links,France,11,Table
-8,Vendetta,Mueller,Spain,3,Phone
-9,Laura,Smith,Portugal,9,Salad
-10,Michelle,Big,Germany,2,Apple
-11,Lola,Small,America,15,Bread
-12,Milo,Left,Italy,4,Orange
-13,Malte,Right,Japan,4,TV
-14,Christoph,Middle,Korea,78,Book
-15,Adriana,Up,Poland,,
-16,Orelly,Down,France,1,Table
-17,Hiro,Gauche,Spain,12,Phone
-18,Richard,Droite,Portugal,66,Salad
-19,Roy,Milieu,Germany,8,Apple Pro
-20,Kyle,Haut,America,3,Bread
-21,Tilo,Agua,,5,Book
-22,Sonja,Bas,Italy,1,Orange
-23,Flora,Derriere,Japan,8,TV
-24,Oskar,Avant,Korea,,
-25,Philipp,Triton,Poland,4,Sandwich
-26,Mike,Klevin,France,77,Table
-27,Tim,Gross,Spain,12,Phone
-28,Tim,Gross,Germany,5,TV
-29,Henry,Klein,America,13,Salad
-30,Malte,Right,Japan,12,Table
-31,John,,,1,Table
-32,Malte,Right,Japan,66,Apple
-33,Michelle,Big,Germany,8,Orange
-34,Roy,Milieu,Germany,3,Table
-35,Kyle,Haut,America,1,Phone
-36,Philipp,Sylar,Italy,1,Laptop Pro
-37,Kim,Chi,Korea,,Orange
+purchase_id,First name,Surname,Country,Amount,Product,customer_id
+1,Tim,Gross,Germany,9,Apple,1
+2,Henry,Klein,America,1,Bread,2
+3,Sara,Mittel,Italy,2,Orange,3
+4,Alina,Oben,Japan,19,TV,4
+5,Mike,Unten,Korea,34,Book,5
+6,Thomas,Rechts,Poland,7,Sandwich,6
+7,Vanessa,Links,France,11,Table,7
+8,Vendetta,Mueller,Spain,3,Phone,8
+9,Laura,Smith,Portugal,9,Salad,9
+10,Michelle,Big,Germany,2,Apple,10
+11,Lola,Small,America,15,Bread,11
+12,Milo,Left,Italy,4,Orange,12
+13,Malte,Right,Japan,4,TV,13
+14,Christoph,Middle,Korea,78,Book,14
+15,Adriana,Up,Poland,,,15
+16,Orelly,Down,France,1,Table,16
+17,Hiro,Gauche,Spain,12,Phone,17
+18,Richard,Droite,Portugal,66,Salad,18
+19,Roy,Milieu,Germany,8,Apple Pro,19
+20,Kyle,Haut,America,3,Bread,20
+21,Tilo,Agua,,5,Book,21
+22,Sonja,Bas,Italy,1,Orange,22
+23,Flora,Derriere,Japan,8,TV,23
+24,Oskar,Avant,Korea,,,24
+25,Philipp,Triton,Poland,4,Sandwich,25
+26,Mike,Klevin,France,77,Table,26
+27,Tim,Gross,Spain,12,Phone,1
+28,Tim,Gross,Germany,5,TV,1
+29,Henry,Klein,America,13,Salad,2
+30,Malte,Right,Japan,12,Table,13
+31,John,,,1,Table,27
+32,Malte,Right,Japan,66,Apple,13
+33,Michelle,Big,Germany,8,Orange,10
+34,Roy,Milieu,Germany,3,Table,19
+35,Kyle,Haut,America,1,Phone,20
+36,Philipp,Sylar,Italy,1,Laptop Pro,28
+37,Kim,Chi,Korea,,Orange,29
