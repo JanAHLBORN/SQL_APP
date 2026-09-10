@@ -112,9 +112,9 @@ EXEMPLARY_TASKS = [
     {
         "question": 'Find all purchases made by customers from "Germany".',
         "answer": (
-            "SELECT *\n"
-            "FROM customer_data\n"
-            "WHERE Country = 'Germany';"
+            'SELECT *\n'
+            'FROM customer_data\n'
+            'WHERE Country = "Germany";'
         ),
     },
     {
@@ -171,17 +171,17 @@ EXEMPLARY_TASKS = [
         ),
         "answer": (
             'SELECT "First name", Surname, COUNT(*) AS num_purchases\n'
-            "FROM customer_data\n"
+            'FROM customer_data\n'
             'GROUP BY "First name", Surname\n'
-            "HAVING COUNT(*) > 1;"
+            'HAVING COUNT(*) > 1;'
         ),
     },
     {
         "question": 'Find all customers whose product name contains the word "Pro" (e.g. "Laptop Pro").',
         "answer": (
-            "SELECT *\n"
-            "FROM customer_data\n"
-            "WHERE Product LIKE '%Pro%';"
+            'SELECT *\n'
+            'FROM customer_data\n'
+            'WHERE Product LIKE "%Pro%";'
         ),
     },
     {
@@ -195,20 +195,20 @@ EXEMPLARY_TASKS = [
         {
         "question": "Label each purchase as 'High' if Amount is greater than 10, otherwise 'Low'.",
         "answer": (
-            "SELECT *,\n"
-            "  CASE\n"
-            "    WHEN Amount > 10 THEN 'High'\n"
-            "    ELSE 'Low'\n"
-            "  END AS amount_category\n"
-            "FROM customer_data;"
+            'SELECT *,\n'
+            '  CASE\n'
+            '    WHEN Amount > 10 THEN "High"\n'
+            '    ELSE "Low"\n'
+            '  END AS amount_category\n'
+            'FROM customer_data;'
         ),
     },
     {
         "question": 'Find all purchases from customers in "Germany", "France", or "Italy".',
         "answer": (
-            "SELECT *\n"
-            "FROM customer_data\n"
-            "WHERE Country IN ('Germany', 'France', 'Italy');"
+            'SELECT *\n'
+            'FROM customer_data\n'
+            'WHERE Country IN ("Germany", "France", "Italy");'
         ),
     },
     {
@@ -237,14 +237,14 @@ EXEMPLARY_TASKS = [
     {
         "question": "Find customers who have bought more than one distinct product (using a subquery instead of GROUP BY/HAVING).",
         "answer": (
-            "SELECT DISTINCT 'First name', Surname\n"
-            "FROM customer_data c1\n"
-            "WHERE (\n"
-            "  SELECT COUNT(DISTINCT Product)\n"
-            "  FROM customer_data c2\n"
-            "  WHERE c2.'First name' = c1.'First name'\n"
-            "    AND c2.Surname = c1.Surname\n"
-            ") > 1;"
+            'SELECT DISTINCT "First name", Surname\n'
+            'FROM customer_data c1\n'
+            'WHERE (\n'
+            '  SELECT COUNT(DISTINCT Product)\n'
+            '  FROM customer_data c2\n'
+            '  WHERE c2."First name" = c1."First name"\n'
+            '    AND c2.Surname = c1.Surname\n'
+            ') > 1;'
         ),
     },
     {
@@ -256,15 +256,15 @@ EXEMPLARY_TASKS = [
         ),
     },
     {
-        "question": "Show a running total of Amount, ordered by id.",
+        "question": "Show a running total of Amount, ordered by purchase_id.",
         "answer": (
-            "SELECT id, Amount,\n"
-            "  SUM(Amount) OVER (ORDER BY id) AS running_total\n"
+            "SELECT purchase_id, Amount,\n"
+            "  SUM(Amount) OVER (ORDER BY purchase_id) AS running_total\n"
             "FROM customer_data;"
         ),
     },
     {
-        "question": "Using a CTE (WITH clause), find countries whose total spending is above 200.",
+        "question": "Using a CTE (WITH clause), find countries whose total spending is above 50.",
         "answer": (
             "WITH country_totals AS (\n"
             "  SELECT Country, SUM(Amount) AS total_spent\n"
@@ -273,37 +273,37 @@ EXEMPLARY_TASKS = [
             ")\n"
             "SELECT *\n"
             "FROM country_totals\n"
-            "WHERE total_spent > 200;"
+            "WHERE total_spent > 50;"
         ),
     },
     {
         "question": (
             "Combine two lists into one result: customers from 'Germany', "
-            "and separately customers whose Amount is over 100 (no duplicates)."
+            "and separately customers whose Amount is over 10 (no duplicates)."
         ),
         "answer": (
-            "SELECT 'First name', Surname, Country, Amount\n"
-            "FROM customer_data\n"
-            "WHERE Country = 'Germany'\n"
-            "UNION\n"
-            "SELECT 'First name', Surname, Country, Amount\n"
-            "FROM customer_data\n"
-            "WHERE Amount > 100;"
+            'SELECT "First name", Surname, Country, Amount\n'
+            'FROM customer_data\n'
+            'WHERE Country = "Germany"\n'
+            'UNION\n'
+            'SELECT "First name", Surname, Country, Amount\n'
+            'FROM customer_data\n'
+            'WHERE Amount > 10;'
         ),
     },
         {
         "question": 'Insert a new customer purchase: First name "Max", Surname "Mustermann", Country "Germany", Amount 250, Product "Keyboard".',
         "answer": (
             'INSERT INTO customer_data ("First name", Surname, Country, Amount, Product)\n'
-            "VALUES ('Max', 'Mustermann', 'Germany', 250, 'Keyboard');"
+            'VALUES ("Max", "Mustermann", "Germany", 250, "Keyboard");'
         ),
     },
     {
         "question": "Increase the Amount by 10% for all purchases made in \"France\".",
         "answer": (
-            "UPDATE customer_data\n"
-            "SET Amount = Amount * 1.1\n"
-            "WHERE Country = 'France';"
+            'UPDATE customer_data\n'
+            'SET Amount = Amount * 1.1\n'
+            'WHERE Country = "France";'
         ),
     },
     {
@@ -321,13 +321,69 @@ EXEMPLARY_TASKS = [
         ),
     },
     {
-        "question": "Set Discount to 15 for every purchase with an Amount greater than 200, and 0 for all others.",
+        "question": "Set Discount to 15 for every purchase with an Amount greater than 20, and 0 for all others.",
         "answer": (
             "UPDATE customer_data\n"
             "SET Discount = CASE\n"
-            "  WHEN Amount > 200 THEN 15\n"
+            "  WHEN Amount > 20 THEN 15\n"
             "  ELSE 0\n"
             "END;"
+        ),
+    },
+    {
+        "question": "Show each purchase together with the Username of the customer who made it.",
+        "answer": (
+            'SELECT p.purchase_id, p."First name", p.Surname, p.Amount, s.Username\n'
+            'FROM customer_data p\n'
+            'JOIN customer_secrets s\n'
+            '  ON p.customer_id = s.customer_id;'
+        ),
+    },
+    {
+        "question": "Find all customers in customer_secrets who have never made a purchase.",
+        "answer": (
+            'SELECT s.customer_id, s.Username\n'
+            'FROM customer_secrets s\n'
+            'LEFT JOIN customer_data p\n'
+            '  ON s.customer_id = p.customer_id\n'
+            'WHERE p.customer_id IS NULL;'
+        ),
+    },
+    {
+        "question": "Show the total amount spent per Username, highest spender first.",
+        "answer": (
+            'SELECT s.Username, SUM(p.Amount) AS total_spent\n'
+            'FROM customer_data p\n'
+            'JOIN customer_secrets s\n'
+            '  ON p.customer_id = s.customer_id\n'
+            'GROUP BY s.Username\n'
+            'ORDER BY total_spent DESC;'
+        ),
+    },
+    {
+        "question": "Find all purchases made by customers older than 30, showing their Age alongside the purchase details.",
+        "answer": (
+            'SELECT p.purchase_id, p.Product, p.Amount, s.Age\n'
+            'FROM customer_data p\n'
+            'JOIN customer_secrets s\n'
+            '  ON p.customer_id = s.customer_id\n'
+            'WHERE s.Age > 30;'
+        ),
+    },
+    {
+        "question": (
+            "Show purchase details together with the customer's Username, "
+            "without exposing the Password column, even though both tables "
+            "are joined together."
+        ),
+        "answer": (
+            '-- Never use SELECT * when joining a table that contains\n'
+            '-- sensitive columns like Password: it would leak them into\n'
+            '-- the result. Always list only the columns actually needed.\n'
+            'SELECT p.purchase_id, p."First name", p.Surname, p.Amount, s.Username\n'
+            'FROM customer_data p\n'
+            'JOIN customer_secrets s\n'
+            '  ON p.customer_id = s.customer_id;'
         ),
     },
 ]
